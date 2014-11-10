@@ -182,14 +182,17 @@ INSERT INTO Orders( ordno, mon, cid, aid, pid, qty, dollars )
   VALUES(1026, 'may', 'c002', 'a05', 'p03',  800, 740.00);
   
 --1
-SELECT city FROM Agents
-INNER JOIN Orders
-ON Agents.aid=Orders.aid
-WHERE cid = 'c001';
+SELECT Agents.city FROM Agents
+JOIN Orders
+	ON Agents.aid=Orders.aid
+	JOIN Customers
+	ON Orders.cid=Customers.cid
+WHERE Customers.name = 'Tiptop';
+
 
 --2
 SELECT Products.pid FROM Products
-FULL OUTER JOIN Orders
+JOIN Orders
 	ON Products.pid=Orders.pid JOIN Customers
 	ON Orders.cid=Customers.cid
 WHERE Customers.city = 'Kyoto';
@@ -206,7 +209,7 @@ FULL OUTER JOIN Orders
 WHERE Orders.cid IS null;
 
 --5
-SELECT Customers.name,Agents.name FROM Customers
+SELECT distinct Customers.name,Agents.name FROM Customers
 JOIN Orders
 	ON Customers.cid=Orders.cid JOIN Agents
 	ON Orders.aid=Agents.aid
@@ -222,8 +225,10 @@ WHERE Customers.city=Agents.city;
 SELECT name, city FROM Customers
 WHERE city IN(
 Select city FROM 
-	(SELECT COUNT(*) as cnt, city
+(SELECT COUNT(*) as cnt, city
 	FROM Products
 	GROUP BY city
 	ORDER BY cnt ASC
 	LIMIT 1) AS fewest_cities);
+
+
