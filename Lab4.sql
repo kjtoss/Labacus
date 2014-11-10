@@ -181,6 +181,7 @@ INSERT INTO Orders( ordno, mon, cid, aid, pid, qty, dollars )
 INSERT INTO Orders( ordno, mon, cid, aid, pid, qty, dollars )
   VALUES(1026, 'may', 'c002', 'a05', 'p03',  800, 740.00);
 
+--1
 select city
 from Agents
 where aid IN
@@ -188,18 +189,22 @@ where aid IN
 from Orders
 where cid = 'c001');
 
+--2
 select pid
 from Products
 where pid IN
 (select pid
 from Orders
+where aid IN
+(select aid
+from Agents
 where cid IN
 (select cid
 from Customers
 where city ='Kyoto' 
-)
-);
+)));
 
+--3
 select cid,name
 from Customers
 where cid NOT IN
@@ -208,6 +213,7 @@ from Orders
 where aid = 'a04'
 );
 
+--4
 select cid,name
 from Customers
 where cid IN
@@ -219,6 +225,19 @@ from Orders
 where pid ='p07'
 ));
 
+--5
+select pid
+from Products
+where pid IN
+(select pid
+from Orders
+where cid IN
+(select cid
+from Orders
+where aid = 'a04'
+));
+
+--6
 select pid
 from Products
 where pid IN
@@ -230,6 +249,7 @@ from Agents
 where city = 'Dallas' or city = 'Newark'
 ));
 
+--7
 select name
 from Customers
 where discount IN
