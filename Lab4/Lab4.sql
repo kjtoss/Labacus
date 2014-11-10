@@ -182,12 +182,12 @@ INSERT INTO Orders( ordno, mon, cid, aid, pid, qty, dollars )
   VALUES(1026, 'may', 'c002', 'a05', 'p03',  800, 740.00);
 
 --1
-select city
-from Agents
+select distinct city from Agents
 where aid IN
-(select aid
-from Orders
-where cid = 'c001');
+(select aid from Orders
+where cid IN
+(select cid from Customers
+where name = 'Tiptop'));
 
 --2
 select pid
